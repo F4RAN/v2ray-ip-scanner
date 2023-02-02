@@ -17,7 +17,7 @@ test run on top.csv file and you can change it and put into the file some of vme
 
 OR:
 `python3 custom_test.py total`
-You can scan a lot of ip exists in "http://bot.sudoer.net/result.cf" Thanks to ([@MortezaBashsiz](https://github.com/MortezaBashsiz)
+You can scan a lot of ip exists in "http://bot.sudoer.net/result.cf" Thanks to [@MortezaBashsiz](https://github.com/MortezaBashsiz)
 in a vmess config that grabbed from [Sudoer VPN bot channel](https://t.me/Sudoer_VPN_bot) and check all ips in this vmess config.
 
 ## Result
