@@ -6,17 +6,17 @@ from subprocess import Popen, PIPE, CalledProcessError
 
 import requests
 
-from configs.config import my_config
+from configs.default import default_config
 
 input_file = sys.argv[1]
 
-port = my_config['port'] # Put your selected port here
-id = my_config["id"] # Put your v2ray config uuid here
-protocol = my_config['protocol'] # Put your v2ray connection protocol here (like:ws,tcp,...)
-host = my_config['host'] # Put your Host Address here
-sni = my_config['sni'] # Put your sni Here
-path = my_config['path'] # Put your path here, if you don't set path set "/"
-tls = my_config['tls'] # if set "tls" means you are using tls connection
+port = default_config['port'] # Put your selected port here
+id = default_config["id"] # Put your v2ray config uuid here
+protocol = default_config['protocol'] # Put your v2ray connection protocol here (like:ws,tcp,...)
+host = default_config['host'] # Put your Host Address here
+sni = default_config['sni'] # Put your sni Here
+path = default_config['path'] # Put your path here, if you don't set path set "/"
+tls = default_config['tls'] # if set "tls" means you are using tls connection
 
 if input_file != "top":
     input_file = "links"
