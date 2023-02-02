@@ -10,7 +10,7 @@ then you must build ./utils/LiteSpeedTest
 more details in:
 `https://github.com/xxf098/LiteSpeedTest`
 
-## Run:
+## Run
 you can run project with this command:
 `python3 custom_test.py top`
 test run on top.csv file and you can change it and put into the file some of vmess(or other) links seperated with enter
