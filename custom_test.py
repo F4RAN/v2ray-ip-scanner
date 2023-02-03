@@ -12,17 +12,21 @@ input_file = sys.argv[1]
 
 port = default_config['port'] # Put your selected port here
 id = default_config["id"] # Put your v2ray config uuid here
-protocol = default_config['protocol'] # Put your v2ray connection protocol here (like:ws,tcp,...)
+protocol = default_config['net'] # Put your v2ray connection protocol here (like:ws,tcp,...)
 host = default_config['host'] # Put your Host Address here
 sni = default_config['sni'] # Put your sni Here
 path = default_config['path'] # Put your path here, if you don't set path set "/"
 tls = default_config['tls'] # if set "tls" means you are using tls connection
 
 if input_file != "top":
+    if input_file == "custom":
+        f = open("input.csv","r")
+        ips = f.read().split("\n")
+    else:
+        ips = requests.get("http://bot.sudoer.net/result.cf")
+        ips = ips.text.split("\n")
+        ips = ips[1:len(ips) - 1]
     input_file = "links"
-    ips = requests.get("http://bot.sudoer.net/result.cf")
-    ips = ips.text.split("\n")
-    ips = ips[1:len(ips) - 1]
     vmess_list = []
     parts = int(len(ips) / 500) + 1
     print(f"Scanning f{len(ips)} ips http://bot.sudoer.net/result.cf")
