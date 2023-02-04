@@ -6,21 +6,22 @@ from subprocess import Popen, PIPE, CalledProcessError
 
 import requests
 
+from configs.config import my_config
 from configs.default import default_config
 
 input_file = sys.argv[1]
 
-port = default_config['port'] # Put your selected port here
-id = default_config["id"] # Put your v2ray config uuid here
-protocol = default_config['net'] # Put your v2ray connection protocol here (like:ws,tcp,...)
-host = default_config['host'] # Put your Host Address here
-sni = default_config['sni'] # Put your sni Here
-path = default_config['path'] # Put your path here, if you don't set path set "/"
-tls = default_config['tls'] # if set "tls" means you are using tls connection
+port = default_config['port']  # Put your selected port here
+id = default_config["id"]  # Put your v2ray config uuid here
+protocol = default_config['net']  # Put your v2ray connection protocol here (like:ws,tcp,...)
+host = default_config['host']  # Put your Host Address here
+sni = default_config['sni']  # Put your sni Here
+path = default_config['path']  # Put your path here, if you don't set path set "/"
+tls = default_config['tls']  # if set "tls" means you are using tls connection
 
 if input_file != "top":
     if input_file == "custom":
-        f = open("input.csv","r")
+        f = open("input.csv", "r")
         ips = f.read().split("\n")
     else:
         ips = requests.get("http://bot.sudoer.net/result.cf")
@@ -29,9 +30,9 @@ if input_file != "top":
     input_file = "links"
     vmess_list = []
     parts = int(len(ips) / 500) + 1
-    print(f"Scanning f{len(ips)} ips http://bot.sudoer.net/result.cf")
+    print(f"Scanning {len(ips)} ips http://bot.sudoer.net/result.cf")
     print(f"We have ({parts}) parts of ips for scan")
-    selected_part = int(input("Please select a part to scan: "))
+    selected_part = int(input("Please select a part to scan: ")) - 1
     if selected_part > parts or selected_part < 0:
         print("not in rage")
         exit()
@@ -61,20 +62,28 @@ if input_file != "top":
 
     for vmess in vmess_list:
         links += vmess + '\n'
-
     file = open('links.csv', 'w')
     file.write(links)
     file.close()
 else:
     print("Scanning custom inputs in top.csv")
+f = open("links.csv", "r")
+recs = f.read().split("\n")
+if len(recs) < 6:
+    print("ips must be greater than 5, you can use manual mode (soon)")
+    exit()
+
 output_name = "output-" + input_file + "-" + str(datetime.datetime.now())
 cmd = ['./utils/LiteSpeedTest/lite', '--config', './utils/LiteSpeedTest/config.json', '--test', f"./{input_file}.csv"]
+ids = []
 with Popen(cmd, bufsize=5, stderr=PIPE) as p:
     for line in p.stderr:
         for l in line.decode("utf-8").split("\n"):
             if l.find("servers") != -1:
-                ids = "[" + l.split("[")[1].split("]")[0] + "]"
-                ids = json.loads(ids)
+                parts = "[" + l.split("[")[1].split("]")[0] + "]"
+                parts = json.loads(parts)
+                for p in parts:
+                    ids.append(p)
             if l.find("maxspeed") != -1:
                 response = json.loads("{" + l.split("{")[1].split("}")[0] + "}")
                 if response['speed'] != "N/A":
@@ -120,7 +129,8 @@ def sort_file():
     file = False
     try:
         file = open(f"{output_name}.csv", "r")
-    except:pass
+    except:
+        pass
     if file:
         nsorted_records = file.read()
         if nsorted_records:
@@ -145,6 +155,8 @@ def sort_file():
             file.write(sorted_file)
             file.close()
 
+
 sort_file()
-if p.returncode != 0:
-    raise CalledProcessError(p.returncode, p.args)
+print("==========================")
+print("Process done successfully.")
+
